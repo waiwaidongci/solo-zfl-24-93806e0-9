@@ -1,0 +1,56 @@
+{
+  "pigeons": [
+    {
+      "ringNo": "CHN-2026-001",
+      "owner": "北岸棚",
+      "fatherRing": "CHN-2022-188",
+      "motherRing": "CHN-2023-512",
+      "color": "灰",
+      "loft": "北岸A棚",
+      "vaccines": [
+        {
+          "date": "2026-04-01",
+          "name": "新城疫"
+        }
+      ],
+      "transfers": [
+        {
+          "date": "2026-04-15",
+          "from": "育种棚",
+          "to": "北岸棚"
+        }
+      ],
+      "races": [
+        {
+          "date": "2026-06-01",
+          "event": "120公里训放",
+          "distance": 120,
+          "returnTime": "10:42",
+          "rank": 18
+        }
+      ]
+    },
+    {
+      "ringNo": "CHN-2022-188",
+      "owner": "育种棚",
+      "fatherRing": "",
+      "motherRing": "",
+      "color": "雨点",
+      "loft": "种鸽棚",
+      "vaccines": [],
+      "transfers": [],
+      "races": []
+    },
+    {
+      "ringNo": "CHN-2023-512",
+      "owner": "育种棚",
+      "fatherRing": "",
+      "motherRing": "",
+      "color": "红轮",
+      "loft": "种鸽棚",
+      "vaccines": [],
+      "transfers": [],
+      "races": []
+    }
+  ]
+}
