@@ -240,12 +240,23 @@ def run_validation_and_auth():
         ("缴费金额为0", api("POST", "/api/orders/1/payments", OWNER1, {"amountCents": 0, "idempotencyKey": "k0"})),
         ("医疗金额为负", api("POST", "/api/orders/1/medical-items", ADMIN, {"name": "x", "amountCents": -1})),
         ("喂养日期格式错", api("POST", "/api/orders/1/feedings", ADMIN, {"date": "09/12"})),
+        ("喂养日期九十九月九十九日", api("POST", "/api/orders/2/feedings", ADMIN, {"date": "2026-99-99"})),
+        ("喂养日期零年零月零日", api("POST", "/api/orders/2/feedings", ADMIN, {"date": "0000-00-00"})),
+        ("喂养日期平年2月29日", api("POST", "/api/orders/2/feedings", ADMIN, {"date": "2026-02-29"})),
+        ("喂养日期2月30日", api("POST", "/api/orders/2/feedings", ADMIN, {"date": "2026-02-30"})),
+        ("喂养日期13月", api("POST", "/api/orders/2/feedings", ADMIN, {"date": "2026-13-01"})),
         ("非法JSON", api("POST", "/api/orders", OWNER1, raw=b"{not json")),
         ("未知路由", api("GET", "/api/nope", ADMIN)),
         ("不存在的寄养单", api("GET", "/api/orders/99999", ADMIN)),
     ]
     for name, (status, body) in cases:
         check(f"{name} → 4xx", 400 <= status < 500, (status, body))
+
+    # 正常日期(含闰日)仍接受，同日重复仍拦截
+    check("喂养正常日期(闰日2028-02-29) → 201",
+          api("POST", "/api/orders/2/feedings", ADMIN, {"date": "2028-02-29"})[0] == 201)
+    status, dup = api("POST", "/api/orders/2/feedings", ADMIN, {"date": "2028-02-29"})
+    check("同日重复喂养仍拦截(409)", status == 409 and dup["error"] == "feeding_exists", dup)
 
     print("== 权限边界 ==")
     check("无令牌 → 401", api("GET", "/api/orders")[0] == 401)

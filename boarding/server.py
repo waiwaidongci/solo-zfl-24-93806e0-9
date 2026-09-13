@@ -254,6 +254,10 @@ def add_feeding(conn, user, order_id, data):
     feed_date = as_non_empty_str(data["date"], "date", 10)
     if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", feed_date):
         raise ApiError(400, "invalid_param", "date 格式应为 YYYY-MM-DD")
+    try:
+        datetime.strptime(feed_date, "%Y-%m-%d")  # 必须是真实日历日期
+    except ValueError:
+        raise ApiError(400, "invalid_date", f"不存在的日历日期: {feed_date}")
     note = str(data.get("note", ""))[:200]
     try:
         with tx(conn):
